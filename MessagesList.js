@@ -1,3 +1,7 @@
+import React from 'react'
+import {shallow} from 'enzyme';
+import Message from './Message';
+
 class MessagesList extends React.Component {
     render() {
         const { messages } = this.props;
@@ -8,3 +12,4 @@ class MessagesList extends React.Component {
     </ul>;
     }
 }
+export default MessagesList;
