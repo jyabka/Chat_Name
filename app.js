@@ -1,4 +1,3 @@
-const URL = 'http://localhost:3000';
 class App extends React.Component {
 
     constructor() {

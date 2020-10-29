@@ -20,7 +20,6 @@ class Form extends React.Component {
 
     }
 
-
     render() {
         const {nick, message} = this.state;
         return <form>
