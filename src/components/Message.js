@@ -10,4 +10,4 @@ import { shallow } from 'enzyme';
         </li>;
     }
 }
-export default Message
+export default Message;

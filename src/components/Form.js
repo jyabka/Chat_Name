@@ -11,7 +11,6 @@ class Form extends React.Component {
     }
 
     handleSend() {
-
         this.props.postMessage({
             nick: this.state.nick,
             message: this.state.message
@@ -20,7 +19,6 @@ class Form extends React.Component {
             nick: '',
             message: '',
         });
-
     }
 
     render() {
@@ -46,4 +44,4 @@ class Form extends React.Component {
         </form>;
     }
 }
-export default Form
+export default Form;
