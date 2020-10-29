@@ -1,11 +1,4 @@
-h1 {
-    color: #a2a2a2;
-}
-
-.info {
-    background-color: #ad0000;
-}
-
-#additionalInfo {
-    background-color: #0000ad;
+body
+{
+    background: orangered;
 }
