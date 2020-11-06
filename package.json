@@ -13,10 +13,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config ./configs/webpack.development.js",
     "test": "jest",
     "start": "node server.js",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js"
+    "build": "cross-env NODE_ENV=production webpack --config ./configs/webpack.production.js"
   },
   "repository": {
     "type": "git",
@@ -46,16 +46,16 @@
     "babel-jest": "^26.6.1",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.2.1",
+    "copy-webpack-plugin": "^6.3.0",
     "cross-env": "^7.0.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "html-webpack-plugin": "^4.5.0",
     "jest": "^26.6.1",
-    "webpack": "^5.3.1",
+    "webpack": "^5.4.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.2.0"
+    "webpack-merge": "^5.3.0"
   },
   "jest": {
     "setupFiles": [
