@@ -1,5 +1,4 @@
 {
-
   "name": "chat",
   "version": "0.1.0",
   "private": true,
@@ -60,7 +59,8 @@
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.1.4"
+    "webpack-merge": "^5.1.4",
+    "formik": "^2.2.2"
   },
   "dependencies": {
     "react": "^16.13.1",
