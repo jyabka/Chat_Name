@@ -1,6 +1,6 @@
 import React from 'react';
-import apiService from '../apiService';
 import { Formik } from 'formik';
+import apiService from '@/apiService';
 
 export default class RegistrationView extends React.Component {
     constructor(props) {
@@ -10,35 +10,41 @@ export default class RegistrationView extends React.Component {
             error: null
         };
     }
+
     handleSubmit(values) {
         apiService.user
             .create(values)
             .then(() => {
-                this.setState({ result: 'User registered successfully' });
+                this.setState({ result: 'Пользователь успешно зарегистрирован' });
                 setTimeout(() => this.props.history.push('/login'), 2000);
             })
-            .catch(error => this.setState({ error: 'Ошибка' + error.response.data.error }));
+            .catch(error => this.setState({ error: 'Ошибка: ' + error.response.data.error }));
     }
 
     render() {
         const { error, result } = this.state;
+
         return (
-            <>
-                <h1>Register</h1>
-                <div>{error && <span style={{ color: 'darkred' }}>{error}</span>}</div>
-                {result}
+            <div className="registration-view">
+                <h1>Регистрация</h1>
+                {error && (
+                    <div className="error">
+                        <span style={{ color: 'red' }}>{error}</span>
+                    </div>
+                )}
+                {result && <div className="result">{result}</div>}
                 <Formik
                     initialValues={{ nickname: '', password: '' }}
                     validate={values => {
                         const errors = {};
                         if (!values.nickname) {
-                            errors.nickname = 'Enter nickname';
+                            errors.nickname = 'Введите никнейм';
                         }
                         if (!values.password) {
-                            errors.password = 'Enter password';
+                            errors.password = 'Введите пароль';
                         }
-                        if (values.password.length < 6) {
-                            errors.password = 'Password must be longer than 6 chars';
+                        if (values.password.length < 7) {
+                            errors.password = 'Длина пароля должна быть больше 6 символов';
                         }
                         return errors;
                     }}
@@ -53,7 +59,7 @@ export default class RegistrationView extends React.Component {
                             )}
                             <div>
                                 <label>
-                                    Nickname:&nbsp;
+                                    Никнейм:&nbsp;
                                     <input
                                         type="text"
                                         name="nickname"
@@ -68,7 +74,7 @@ export default class RegistrationView extends React.Component {
                             )}
                             <div>
                                 <label>
-                                    Password:&nbsp;
+                                    Пароль:&nbsp;
                                     <input
                                         type="password"
                                         name="password"
@@ -78,11 +84,11 @@ export default class RegistrationView extends React.Component {
                                     />
                                 </label>
                             </div>
-                            <button type="submit">Create profile</button>
+                            <button type="submit">Создать пользователя</button>
                         </form>
                     )}
                 </Formik>
-            </>
+            </div>
         );
     }
 }

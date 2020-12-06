@@ -1,5 +1,5 @@
 import React from 'react';
-import apiService from '../apiService';
+import apiService from '@/apiService';
 
 export default class LoginView extends React.Component {
     constructor(props) {
@@ -23,25 +23,35 @@ export default class LoginView extends React.Component {
                 password: this.state.password
             })
             .then(() => {
-                this.setState({ result: 'User log in successfully' });
-                setTimeout(() => this.props.history.push('/profile'), 2000);
+                this.setState({ result: 'Пользователь успешно залогинился' });
+                setTimeout(() => this.redirectAfterLogin(), 2000);
             })
-            .catch(error => this.setState({ error: 'Error' + error.response.data.error }));
+            .catch(error => this.setState({ error: 'Ошибка' + error.response.data.error }));
         e.preventDefault();
     }
 
+    redirectAfterLogin() {
+        const redirectUrl = this.props.location.state
+            ? this.props.location.state.from.pathname
+            : '/profile';
+        this.props.updateAuthHandler().then(() => this.props.history.push(redirectUrl));
+    }
+
     render() {
+        const { error, result } = this.state;
+
         return (
-            <>
+            <div className="login-view">
                 <h1>Логин</h1>
-                {this.state.error}
-                {this.state.result}
+                {error}
+                {result && <div className="result">{result}</div>}
                 <form onSubmit={e => this.handleSubmit(e)}>
                     <div>
                         <label>
-                            Nickname:&nbsp;
+                            Никнейм:&nbsp;
                             <input
                                 type="text"
+                                name="nickname"
                                 value={this.state.nickname}
                                 onChange={e => this.setState({ nickname: e.target.value })}
                             />
@@ -49,9 +59,10 @@ export default class LoginView extends React.Component {
                     </div>
                     <div>
                         <label>
-                            Password:&nbsp;
+                            Пароль:&nbsp;
                             <input
                                 type="password"
+                                name="password"
                                 value={this.state.password}
                                 onChange={e => this.setState({ password: e.target.value })}
                             />
@@ -59,7 +70,7 @@ export default class LoginView extends React.Component {
                     </div>
                     <button type="submit">Войти</button>
                 </form>
-            </>
+            </div>
         );
     }
 }

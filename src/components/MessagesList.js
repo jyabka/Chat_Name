@@ -5,9 +5,13 @@ class MessagesList extends React.Component {
     render() {
         const { messages } = this.props;
         return (
-            <ul>
-                {messages.map((message, index) => (
-                    <Message nick={message.nick} message={message.message} key={index} />
+            <ul className="message-list">
+                {messages.map(message => (
+                    <Message
+                        content={message.content}
+                        nickname={message.nickname}
+                        key={message.id}
+                    />
                 ))}
             </ul>
         );

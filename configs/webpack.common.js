@@ -1,3 +1,4 @@
+const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -21,10 +22,11 @@ module.exports = {
                         ignore: ['**/index.html']
                     }
                 }
-
-            ],
+            ]
         }),
         new HtmlWebpackPlugin({
+            //title: 'Super chat',
+            //favicon: paths.static + '/favicon.png',
             template: paths.static + '/index.html', // template file
             filename: 'index.html' // output file
         })
@@ -54,5 +56,10 @@ module.exports = {
                 ]
             }
         ]
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, '../src')
+        }
     }
 };

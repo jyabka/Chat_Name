@@ -6,6 +6,7 @@ class ChatForm extends React.Component {
         super(props);
         this.state = {
             title: '',
+            isPrivate: false,
             error: ''
         };
     }
@@ -27,24 +28,43 @@ class ChatForm extends React.Component {
         event.preventDefault();
 
         if (this.validate()) {
-            this.props.handleSubmit({ title: this.state.title });
+            this.props.handleSubmit({
+                title: this.state.title,
+                isPrivate: this.state.isPrivate
+            });
+            this.setState({ title: '', isPrivate: false });
         }
     }
 
     render() {
-        const { title, error } = this.state;
+        const { title, isPrivate, error } = this.state;
 
         return (
             <>
                 <h4>Создание/редактирование чата</h4>
-                <form onSubmit={e => this.handleSubmit(e)}>
+                <form className="chat-form" onSubmit={e => this.handleSubmit(e)}>
                     <div>{error && <span style={{ color: 'red' }}>{error}</span>}</div>
                     <div>
                         <label>
                             Название чата:
                             <input
                                 value={title}
+                                type="text"
+                                name="chat-title"
                                 onChange={event => this.setState({ title: event.target.value })}
+                            />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Приватный:
+                            <input
+                                type="checkbox"
+                                name="chat-title"
+                                checked={isPrivate}
+                                onChange={event =>
+                                    this.setState({ isPrivate: event.target.checked })
+                                }
                             />
                         </label>
                     </div>

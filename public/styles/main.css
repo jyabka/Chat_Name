@@ -1,11 +1,11 @@
 h1 {
-    color: black;
+    color: #a2a2a2;
 }
 
 .info {
-    background-color:darkgrey;
+    background-color: #ad0000;
 }
 
 #additionalInfo {
-    background-color:darkgrey;
+    background-color: #0000ad;
 }
