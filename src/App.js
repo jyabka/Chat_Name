@@ -7,16 +7,20 @@ import ProfileView from './views/ProfileView';
 import apiService from './apiService';
 import ChatSearchView from '@/views/ChatSearchView';
 import UserSearchView from '@/views/UserSearchView';
+import ViewHeader from '@/views/ViewHeader';
+import { Drawer, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import { AccountCircle, GroupAdd, MeetingRoom, PersonAdd, Search } from '@material-ui/icons';
 
 class PrivateRoute extends React.Component {
     render() {
-        const { user, component: Component, componentProps, ...rest } = this.props;
+        const { user, children, ...rest } = this.props;
         return (
             <Route
                 {...rest}
                 render={routeProps =>
                     user ? (
-                        <Component {...componentProps} {...routeProps} />
+                        React.cloneElement(children, { ...routeProps, user })
                     ) : (
                         <Redirect
                             to={{
@@ -36,7 +40,8 @@ class App extends React.Component {
         super(props);
         this.state = {
             user: null,
-            initDone: false
+            initDone: false,
+            isDrawerOpen: false
         };
         this.updateAuthState = this.updateAuthState.bind(this);
     }
@@ -59,8 +64,12 @@ class App extends React.Component {
         });
     }
 
+    drawerHandler(isDrawerOpen) {
+        this.setState({ isDrawerOpen });
+    }
+
     render() {
-        const { user, initDone } = this.state;
+        const { user, initDone, isDrawerOpen } = this.state;
 
         if (!initDone) {
             return <>Loading...</>;
@@ -68,46 +77,128 @@ class App extends React.Component {
 
         return (
             <>
-                {user ? (
-                    <>
-                        <Link to="/profile">Профиль {user.nickname}</Link>&nbsp;
-                        <Link to="/chatSearch">Поиск чатов</Link>&nbsp;
-                        <Link to="/userSearch">Поиск пользователей</Link>&nbsp;
-                        <button onClick={() => this.logoutHandler()}>Выйти</button>
-                    </>
-                ) : (
-                    <>
-                        <Link to="/login">Логин</Link>&nbsp;
-                        <Link to="/registration">Регистрация</Link>&nbsp;
-                    </>
-                )}
+                <Drawer anchor="left" open={isDrawerOpen} onClose={() => this.drawerHandler(false)}>
+                    <div
+                        role="presentation"
+                        onClick={() => this.drawerHandler(false)}
+                        onKeyDown={() => this.drawerHandler(false)}
+                    >
+                        <List>
+                            {user ? (
+                                <>
+                                    <ListItem button component={Link} to="/profile">
+                                        <ListItemIcon>
+                                            <AccountCircle />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Профиль" />
+                                    </ListItem>
+                                    <ListItem button component={Link} to="/chatSearch">
+                                        <ListItemIcon>
+                                            <Search />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Поиск чатов" />
+                                    </ListItem>
+                                    <ListItem button component={Link} to="/userSearch">
+                                        <ListItemIcon>
+                                            <GroupAdd />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Поиск пользователей" />
+                                    </ListItem>
+                                    <ListItem button onClick={() => this.logoutHandler()}>
+                                        <ListItemIcon>
+                                            <MeetingRoom />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Выход" />
+                                    </ListItem>
+                                </>
+                            ) : (
+                                <>
+                                    <ListItem button component={Link} to="/login">
+                                        <ListItemIcon>
+                                            <AccountCircle />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Логин" />
+                                    </ListItem>
+                                    <ListItem button component={Link} to="/registration">
+                                        <ListItemIcon>
+                                            <PersonAdd />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Регистрация" />
+                                    </ListItem>
+                                </>
+                            )}
+                        </List>
+                    </div>
+                </Drawer>
                 <Switch>
                     <Route
                         path="/login"
                         render={routeProps => (
-                            <LoginView updateAuthHandler={this.updateAuthState} {...routeProps} />
+                            <ViewHeader
+                                menuHandler={() => this.drawerHandler(true)}
+                                logoutHandler={() => this.logoutHandler()}
+                                title="Логин"
+                                user={user}
+                                {...routeProps}
+                            >
+                                <LoginView updateAuthHandler={this.updateAuthState} />
+                            </ViewHeader>
                         )}
                     />
-                    <Route path="/registration" component={RegistrationView} />
-                    <PrivateRoute path="/chat/:id" user={user} component={ChatView} />
-                    <PrivateRoute
-                        path="/profile"
-                        user={user}
-                        component={ProfileView}
-                        componentProps={{ user }}
+                    <Route
+                        path="/registration"
+                        render={routeProps => (
+                            <ViewHeader
+                                menuHandler={() => this.drawerHandler(true)}
+                                logoutHandler={() => this.logoutHandler()}
+                                title="Регистрация"
+                                user={user}
+                                {...routeProps}
+                            >
+                                <RegistrationView />
+                            </ViewHeader>
+                        )}
                     />
-                    <PrivateRoute
-                        path="/chatSearch"
-                        user={user}
-                        component={ChatSearchView}
-                        componentProps={{ user }}
-                    />
-                    <PrivateRoute
-                        path="/userSearch"
-                        user={user}
-                        component={UserSearchView}
-                        componentProps={{ user }}
-                    />
+                    <PrivateRoute path="/chat/:id" user={user}>
+                        <ViewHeader
+                            menuHandler={() => this.drawerHandler(true)}
+                            logoutHandler={() => this.logoutHandler()}
+                            title="Чат"
+                            user={user}
+                        >
+                            <ChatView />
+                        </ViewHeader>
+                    </PrivateRoute>
+                    <PrivateRoute path="/profile" user={user}>
+                        <ViewHeader
+                            menuHandler={() => this.drawerHandler(true)}
+                            logoutHandler={() => this.logoutHandler()}
+                            title="Профиль"
+                            user={user}
+                        >
+                            <ProfileView />
+                        </ViewHeader>
+                    </PrivateRoute>
+                    <PrivateRoute path="/chatSearch" user={user}>
+                        <ViewHeader
+                            menuHandler={() => this.drawerHandler(true)}
+                            logoutHandler={() => this.logoutHandler()}
+                            title="Поиск чатов"
+                            user={user}
+                        >
+                            <ChatSearchView />
+                        </ViewHeader>
+                    </PrivateRoute>
+                    <PrivateRoute path="/userSearch" user={user}>
+                        <ViewHeader
+                            menuHandler={() => this.drawerHandler(true)}
+                            logoutHandler={() => this.logoutHandler()}
+                            title="Поиск пользователей"
+                            user={user}
+                        >
+                            <UserSearchView />
+                        </ViewHeader>
+                    </PrivateRoute>
                     <Redirect exact from="/" to="/profile" />
                 </Switch>
             </>

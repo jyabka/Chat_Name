@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import apiService from '@/apiService';
+import UserList from '@/components/UserList';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 export default class UserSearchView extends Component {
     constructor(props) {
@@ -39,13 +43,23 @@ export default class UserSearchView extends Component {
     }
 
     handleStartDialogue(userId) {
+        const redirectToChat = chatId => {
+            this.props.history.push(`/chat/${chatId}`);
+        };
+
         apiService.chat
             .create({
                 isDialogue: true,
                 participants: [userId]
             })
             .then(response => response.data)
-            .then(chat => this.props.history.push(`/chat/${chat.id}`));
+            .then(chat => redirectToChat(chat.id))
+            .catch(error => {
+                if (error.response.status === 303) {
+                    return error.response.data;
+                }
+            })
+            .then(chat => (chat ? redirectToChat(chat.id) : null));
     }
 
     render() {
@@ -53,34 +67,26 @@ export default class UserSearchView extends Component {
 
         return (
             <>
-                <h1>Поиск пользователей</h1>
-                <form className="chat-form" onSubmit={e => this.handleSubmit(e)}>
+                <form onSubmit={e => this.handleSubmit(e)}>
                     <div>{error && <span style={{ color: 'red' }}>{error}</span>}</div>
-                    <div>
-                        <label>
-                            Ник:
-                            <input
-                                value={nickname}
-                                type="text"
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={6}>
+                            <TextField
+                                fullWidth
                                 name="chat-title"
+                                label="Ник"
+                                value={nickname}
                                 onChange={event => this.setState({ nickname: event.target.value })}
                             />
-                        </label>
-                    </div>
-                    <button type="submit">Искать</button>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Button variant="contained" type="submit">
+                                Искать
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </form>
-                <ul>
-                    {foundUsers.map(user => (
-                        <li key={user.id}>
-                            {user.nickname}&nbsp;
-                            {user.id !== this.props.user.id && (
-                                <button onClick={() => this.handleStartDialogue(user.id)}>
-                                    диалог
-                                </button>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+                <UserList list={foundUsers} handleClick={id => this.handleStartDialogue(id)} />
             </>
         );
     }
