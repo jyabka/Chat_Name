@@ -1,7 +1,7 @@
 {
-  "name": "html-chat",
-  "version": "0.0.1",
-  "description": "Simple chat with react.js",
+  "name": "Chat",
+  "version": "0.3.1",
+  "description": "Simple chat on React",
   "main": "main.js",
   "scripts": {
     "test": "jest",
@@ -21,10 +21,6 @@
     "type": "git",
     "url": "git+https://github.com/jyabka/Chat_Name.git"
   },
-  "keywords": [
-    "chat",
-    "react.js"
-  ],
   "author": "Jyabka",
   "license": "none",
   "devDependencies": {
@@ -62,9 +58,10 @@
     "husky": "^4.3.0",
     "jest": "^26.4.2",
     "lint-staged": "^10.4.2",
-    "loki": "^0.25.1",
+    "loki": "^0.26.0",
     "nightwatch": "^1.5.1",
     "prettier": "^2.1.2",
+    "prop-types": "^15.7.2",
     "react-is": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-test-renderer": "^16.13.1",
