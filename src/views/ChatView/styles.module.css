@@ -1,8 +1,8 @@
 .chatView {
     display: flex;
     flex-flow: column;
-    height: 95%;
-    width: 80%;
+    height: 100%;
+    width: 800px;
     margin: 0 auto;
 }
 

@@ -4,10 +4,9 @@ import MessagesList from '@/components/MessagesList';
 import apiService from '@/apiService';
 import styles from './styles.module.css';
 
-class ChatView extends React.Component {
+class Index extends React.Component {
     constructor() {
         super();
-        // эти переменные будут меняться динамически
         this.state = {
             messages: [],
             users: []
@@ -25,7 +24,7 @@ class ChatView extends React.Component {
                 this.scrollToBottom();
             }
             firstTime = false;
-        }, 1000);
+        }, 500);
     }
 
     componentWillUnmount() {
@@ -41,47 +40,37 @@ class ChatView extends React.Component {
             });
     }
 
-    async getMessages() {
-        function getMessageIds(messages) {
-            return messages.map(message => message.id);
-        }
-
-        function getOnlyNewMessages(serverMessages, stateMessages) {
-            const serverIds = getMessageIds(serverMessages);
-            const stateIds = getMessageIds(stateMessages);
-            const newIds = serverIds.filter(id => !stateIds.includes(id));
-            return serverMessages.filter(message => newIds.includes(message.id));
-        }
-
-        const serverMessages = await apiService.message.getMessages(this.props.match.params.id);
-        let newMessages = getOnlyNewMessages(serverMessages, this.state.messages);
-        await this.getUsers(newMessages);
-        newMessages = newMessages.map(message => {
-            const user = this.state.users.find(user => user.id === message.userId);
-            message.nickname = user.nickname;
-            return message;
-        });
-        this.setState({ messages: [...this.state.messages, ...newMessages] });
+    scrollToBottom() {
+        this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
     }
 
-    async getUsers(newMessages) {
+    getMessages() {
+        apiService.message
+            .getMessages(this.props.match.params.id)
+            .then(response => response.data)
+            .then(messages => this.setState({ messages }))
+            .then(() => this.getUsers())
+            .then(() => {
+                const newMessages = this.state.messages.map(message => {
+                    const user = this.state.users.find(user => user.id === message.userId);
+                    message.nickname = user.nickname;
+                    return message;
+                });
+                this.setState({ messages: newMessages });
+            });
+    }
+
+    getUsers() {
         const oldUsers = this.state.users;
         const oldUsersIds = oldUsers.map(user => user.id);
-        const newUsersIds = [...new Set(newMessages.map(message => message.userId))];
+        const newUsersIds = [...new Set(this.state.messages.map(message => message.userId))];
         const toLoad = newUsersIds.filter(id => !oldUsersIds.includes(id));
 
         if (!toLoad.length) return;
 
-        const newUsers = [];
-        for (let id of toLoad) {
-            const user = await apiService.user.getById(id);
-            newUsers.push(user);
-        }
-        this.setState({ users: [...oldUsers, ...newUsers] });
-    }
-
-    scrollToBottom() {
-        this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+        return Promise.all(toLoad.map(id => apiService.user.getById(id)))
+            .then(responses => responses.map(response => response.data))
+            .then(newUsers => this.setState({ users: [...oldUsers, ...newUsers] }));
     }
 
     render() {
@@ -105,4 +94,4 @@ class ChatView extends React.Component {
     }
 }
 
-export default ChatView;
+export default Index;

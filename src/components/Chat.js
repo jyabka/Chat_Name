@@ -45,6 +45,7 @@ class Chat extends React.Component {
                 </ListItem>
             );
         }
+
         if (this.isDialogue()) {
             return (
                 <ListItem button onClick={() => this.props.goHandler(this.props.chat.id)}>

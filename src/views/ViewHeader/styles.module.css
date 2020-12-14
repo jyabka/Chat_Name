@@ -1,21 +1,18 @@
 .root {
-    position: fixed;
-    height: 25%;
-    width: 25%;
+    height: 100%;
 }
+
 .menuButton {
-    margin: 20px;
+    margin-right: 16px;
 }
-.tb {
-    background-color: black;
-}
+
 .title {
-    color: #ffd800;
     flex-grow: 1;
 }
+
 .children {
-    margin-top: 50px;
-    height: 95%;
+    margin-top: 70px;
+    height: 100%;
     width: 800px;
     margin-right: auto;
     margin-left: auto;
@@ -28,23 +25,3 @@
         margin-left: 0;
     }
 }
-body {
-    background-color: whitesmoke;
-    font-family: 'Russo One', sans-serif;
-    font-size: 18px;
-    color: black;
-}
-button {
-    font-family: 'Russo One', sans-serif;
-    width: auto;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    height: 26px;
-    font-size: 16px;
-    color: #ffd800;
-    background-color: black;
-    border: 1px;
-    border-radius: 20px;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');

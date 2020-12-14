@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import LoginView from './views/LoginView';
 import RegistrationView from './views/RegistrationView';
-import ChatView from './views/ChatView';
+import Index from './views/ChatView';
 import ProfileView from './views/ProfileView';
 import apiService from './apiService';
 import ChatSearchView from '@/views/ChatSearchView';
@@ -166,7 +166,7 @@ class App extends React.Component {
                             title="Чат"
                             user={user}
                         >
-                            <ChatView />
+                            <Index />
                         </ViewHeader>
                     </PrivateRoute>
                     <PrivateRoute path="/profile" user={user}>

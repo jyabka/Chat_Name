@@ -3,15 +3,26 @@ import apiService from '@/apiService';
 import ChatForm from '@/components/ChatForm';
 import ChatList from '@/components/ChatList';
 import Typography from '@material-ui/core/Typography';
-import { Box, Card, CardActions, CardContent } from '@material-ui/core';
+import {
+    Box,
+    Card,
+    CardActions,
+    CardContent,
+    Dialog,
+    DialogContent,
+    DialogTitle
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { AddBox } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
 
 export default class ProfileView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            chats: []
+            chats: [],
+            isDialogOpen: false
         };
     }
 
@@ -21,6 +32,7 @@ export default class ProfileView extends React.Component {
 
     handleChatCreate(params) {
         apiService.chat.create(params).then(() => this.getChatList());
+        this.setState({ isDialogOpen: false });
     }
 
     getChatList() {
@@ -48,6 +60,7 @@ export default class ProfileView extends React.Component {
 
     render() {
         const { user } = this.props;
+        const { isDialogOpen } = this.state;
         return (
             <>
                 <Grid container justify="center">
@@ -69,8 +82,14 @@ export default class ProfileView extends React.Component {
                 </Grid>
 
                 <Box mt={3} mx="auto">
-                    <p align="center">Мои чаты</p>
+                    <Typography variant="h6" align="center">
+                        Мои чаты
+                        <IconButton onClick={() => this.setState({ isDialogOpen: true })}>
+                            <AddBox />
+                        </IconButton>
+                    </Typography>
                 </Box>
+
                 <ChatList
                     userId={user.id}
                     list={this.state.chats}
@@ -78,7 +97,16 @@ export default class ProfileView extends React.Component {
                     joinHandler={id => this.joinHandler(id)}
                     deleteHandler={id => this.deleteHandler(id)}
                 />
-                <ChatForm handleSubmit={data => this.handleChatCreate(data)} />
+                <Dialog
+                    onClose={() => this.setState({ isDialogOpen: false })}
+                    aria-labelledby="simple-dialog-title"
+                    open={isDialogOpen}
+                >
+                    <DialogTitle>Создание чата</DialogTitle>
+                    <DialogContent>
+                        <ChatForm handleSubmit={data => this.handleChatCreate(data)} />
+                    </DialogContent>
+                </Dialog>
             </>
         );
     }
