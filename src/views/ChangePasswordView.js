@@ -4,24 +4,23 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Card, CardContent, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
-//import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from '@/styling/theme';
-import ChangePasswordForm from '@/components/ChangePasswordForm';
 
-export default class LoginView extends React.Component {
-    constructor(props) {
-        super(props);
+export default class ChangePasswordView extends React.Component {
+    constructor() {
+        super();
         this.state = {
             nickname: '',
-            password: '',
+            newPassword: '',
             result: null,
             error: null,
             formErrors: {
                 nickname: null,
-                password: null
+                newPassword: null
             }
         };
     }
@@ -35,7 +34,7 @@ export default class LoginView extends React.Component {
         }
 
         if (this.state.password.length === 0) {
-            formErrors.password = 'Введите пароль';
+            formErrors.newPassword = 'Введите новый пароль';
             noErrors = false;
         }
 
@@ -55,44 +54,31 @@ export default class LoginView extends React.Component {
             return;
         }
 
-        apiService.auth
-            .login({
+        apiService.change
+            .recreate({
                 nickname: this.state.nickname,
-                password: this.state.password
+                newPassword: this.state.newPassword
             })
             .then(() => {
-                this.setState({ result: 'Пользователь успешно залогинился' });
-                setTimeout(() => this.redirectAfterLogin(), 2000);
+                this.setState({ result: 'Пароль успешно изменен' });
+                setTimeout(() => this.redirectAfterChangePassword(), 1500);
             })
             .catch(error => this.setState({ error: 'Ошибка: ' + error.response.data.error }));
     }
 
-    setNewPassword() {
-        apiService.change
-            .recreate(this.props.nickname, this.props.newPassword)
-            .then(response => response.data)
-            .then(change => this.setState({ change }));
-    }
-
-    redirectAfterLogin() {
+    redirectAfterChangePassword() {
         const redirectUrl = this.props.location.state
             ? this.props.location.state.from.pathname
-            : '/profile';
+            : '/auth';
         this.props.updateAuthHandler().then(() => this.props.history.push(redirectUrl));
     }
 
-    handleChangePassword(params) {
-        apiService.change.recreate(params).then(() => this.getChatList());
-        this.setState({ isDialogOpen: false });
-    }
-
     render() {
-        const { error, result, nickname, password, formErrors } = this.state;
-        const { isDialogOpen } = this.state;
+        const { error, result, nickname, newPassword, formErrors } = this.state;
 
         return (
             <ThemeProvider theme={theme}>
-                <div className="login-view">
+                <div className="change-view">
                     <Grid
                         container
                         spacing={0}
@@ -125,15 +111,17 @@ export default class LoginView extends React.Component {
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextField
-                                                    error={formErrors.password}
-                                                    helperText={formErrors.password}
+                                                    error={formErrors.newPassword}
+                                                    helperText={formErrors.newPassword}
                                                     fullWidth
-                                                    name="password"
-                                                    label="Пароль"
+                                                    name="newPassword"
+                                                    label="Новый пароль"
                                                     type="password"
-                                                    value={password}
+                                                    value={newPassword}
                                                     onChange={e =>
-                                                        this.setState({ password: e.target.value })
+                                                        this.setState({
+                                                            newPassword: e.target.value
+                                                        })
                                                     }
                                                 />
                                             </Grid>
@@ -146,63 +134,23 @@ export default class LoginView extends React.Component {
                                                 xs={12}
                                             >
                                                 <Button
-                                                    name="login"
                                                     type="submit"
                                                     variant="contained"
                                                     color="primary"
                                                 >
-                                                    Войти
+                                                    Сменить
                                                 </Button>
                                             </Grid>
-                                            <Grid
-                                                container
-                                                direction="row"
-                                                justify="center"
-                                                item
-                                                xs={12}
-                                            >
+                                            <Grid item xs={12}>
                                                 <Typography variant="body1">
-                                                    Введите логин и пароль. Ещё не зарегистрированы?{' '}
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        to="/registration"
-                                                    >
-                                                        Зарегистрируйтесь!
-                                                    </Button>
-                                                </Typography>
-                                                <Typography variant="body1">
-                                                    Забыли пароль?{' '}
-                                                    <Button
-                                                        onClick={() =>
-                                                            this.setState({ isDialogOpen: true })
-                                                        }
-                                                        variant="contained"
-                                                        color="primary"
-                                                    >
-                                                        Восстановить
-                                                    </Button>
+                                                    Вспомнили пароль?{' '}
+                                                    <Link to="/login">Войдите!</Link>
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                     </form>
                                 </CardContent>
                             </Card>
-                            <Dialog
-                                onClose={() => this.setState({ isDialogOpen: false })}
-                                aria-labelledby="simple-dialog-title"
-                                open={isDialogOpen}
-                            >
-                                <DialogTitle>Сменить пароль</DialogTitle>
-                                <DialogContent dividers="false">
-                                    <Typography variant="body1" component="p">
-                                        Введите новый пароль
-                                    </Typography>
-                                    <ChangePasswordForm
-                                        handleSubmit={data => this.handleChatCreate(data)}
-                                    />
-                                </DialogContent>
-                            </Dialog>
                         </Grid>
                     </Grid>
                 </div>

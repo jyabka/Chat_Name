@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Chat from '@/components/Chat';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
+import { ChatView } from '@/views/ProfileView';
 
 /**
  * Компонент для отображения списка чатов
@@ -25,6 +26,7 @@ class ChatList extends React.Component {
                                 joinHandler={this.props.joinHandler}
                                 deleteHandler={this.props.deleteHandler}
                                 key={chat.id}
+                                onClick={ChatView.render}
                             />
                         ))}
                     </List>

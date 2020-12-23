@@ -16,6 +16,7 @@
   "rules": {
     "prettier/prettier": ["error"],
     "react/prop-types": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "react/no-unescaped-entities": 0
   }
 }

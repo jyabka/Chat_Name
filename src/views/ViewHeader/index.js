@@ -7,6 +7,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { AccountCircle } from '@material-ui/icons';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { theme } from '@/styling/theme';
 
 export default class ViewHeader extends React.Component {
     constructor(props) {
@@ -35,66 +37,68 @@ export default class ViewHeader extends React.Component {
         const { user, logoutHandler, menuHandler, title, children, history } = this.props;
         const { menuOpen, anchorEl } = this.state;
         return (
-            <>
-                <div className={styles.root}>
-                    <AppBar position="fixed">
-                        <Toolbar>
-                            <IconButton
-                                edge="start"
-                                className={styles.menuButton}
-                                color="inherit"
-                                aria-label="menu"
-                                onClick={menuHandler}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography variant="h6" className={styles.title}>
-                                {title}
-                            </Typography>
-                            {user ? (
-                                <>
-                                    <IconButton
-                                        aria-label="account of current user"
-                                        aria-controls="menu-appbar"
-                                        aria-haspopup="true"
-                                        onClick={e => this.handleMenu(e, true)}
-                                        color="inherit"
-                                    >
-                                        <AccountCircle />
-                                    </IconButton>
-                                    <Menu
-                                        id="menu-appbar"
-                                        anchorEl={anchorEl}
-                                        anchorOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right'
-                                        }}
-                                        keepMounted
-                                        transformOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right'
-                                        }}
-                                        open={menuOpen}
-                                        onClose={e => this.handleMenu(e, false)}
-                                    >
-                                        <MenuItem onClick={() => history.push('/profile')}>
-                                            Profile
-                                        </MenuItem>
-                                        <MenuItem onClick={logoutHandler}>Logout</MenuItem>
-                                    </Menu>
-                                </>
-                            ) : (
-                                <Button color="inherit" onClick={() => history.push('/login')}>
-                                    Логин
-                                </Button>
-                            )}
-                        </Toolbar>
-                    </AppBar>
-                    <div className={styles.children}>
-                        {React.cloneElement(children, this.props)}
+            <ThemeProvider theme={theme}>
+                <>
+                    <div className={styles.root}>
+                        <AppBar color="primary" position="fixed">
+                            <Toolbar>
+                                <IconButton
+                                    edge="start"
+                                    className={styles.menuButton}
+                                    color="inherit"
+                                    aria-label="menu"
+                                    onClick={menuHandler}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Typography variant="h6" className={styles.title}>
+                                    {title}
+                                </Typography>
+                                {user ? (
+                                    <>
+                                        <IconButton
+                                            aria-label="account of current user"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            onClick={e => this.handleMenu(e, true)}
+                                            color="inherit"
+                                        >
+                                            <AccountCircle />
+                                        </IconButton>
+                                        <Menu
+                                            id="menu-appbar"
+                                            anchorEl={anchorEl}
+                                            anchorOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right'
+                                            }}
+                                            keepMounted
+                                            transformOrigin={{
+                                                vertical: 'top',
+                                                horizontal: 'right'
+                                            }}
+                                            open={menuOpen}
+                                            onClose={e => this.handleMenu(e, false)}
+                                        >
+                                            <MenuItem onClick={() => history.push('/profile')}>
+                                                Профиль
+                                            </MenuItem>
+                                            <MenuItem onClick={logoutHandler}>Выйти</MenuItem>
+                                        </Menu>
+                                    </>
+                                ) : (
+                                    <Button color="inherit" onClick={() => history.push('/login')}>
+                                        Логин
+                                    </Button>
+                                )}
+                            </Toolbar>
+                        </AppBar>
+                        <div className={styles.children}>
+                            {React.cloneElement(children, this.props)}
+                        </div>
                     </div>
-                </div>
-            </>
+                </>
+            </ThemeProvider>
         );
     }
 }

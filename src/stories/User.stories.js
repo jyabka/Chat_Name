@@ -13,5 +13,6 @@ export const Main = Template.bind({});
 Main.args = {
     id: '123',
     nickname: 'nickname',
+    password: 'new_password',
     handleClick: action('click')
 };

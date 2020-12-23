@@ -1,16 +1,19 @@
 import React from 'react';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
-import LoginView from './views/LoginView';
-import RegistrationView from './views/RegistrationView';
-import Index from './views/ChatView';
-import ProfileView from './views/ProfileView';
-import apiService from './apiService';
+import LoginView from '@/views/LoginView';
+import RegistrationView from '@/views/RegistrationView';
+import ChatView from '@/views/ProfileView';
+import ProfileView from '@/views/ProfileView';
+import apiService from '@/apiService';
 import ChatSearchView from '@/views/ChatSearchView';
 import UserSearchView from '@/views/UserSearchView';
 import ViewHeader from '@/views/ViewHeader';
+import ChangePasswordView from '@/views/ChangePasswordView';
 import { Drawer, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import List from '@material-ui/core/List';
-import { AccountCircle, GroupAdd, MeetingRoom, PersonAdd, Search } from '@material-ui/icons';
+import { AccountCircle, GroupAdd, PersonAdd, Search } from '@material-ui/icons';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { theme } from '@/styling/theme';
 
 class PrivateRoute extends React.Component {
     render() {
@@ -77,59 +80,54 @@ class App extends React.Component {
 
         return (
             <>
-                <Drawer anchor="left" open={isDrawerOpen} onClose={() => this.drawerHandler(false)}>
-                    <div
-                        role="presentation"
-                        onClick={() => this.drawerHandler(false)}
-                        onKeyDown={() => this.drawerHandler(false)}
+                <ThemeProvider theme={theme}>
+                    <Drawer
+                        color="primary"
+                        anchor="left"
+                        open={isDrawerOpen}
+                        onClose={() => this.drawerHandler(false)}
                     >
-                        <List>
-                            {user ? (
-                                <>
-                                    <ListItem button component={Link} to="/profile">
-                                        <ListItemIcon>
-                                            <AccountCircle />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Профиль" />
-                                    </ListItem>
-                                    <ListItem button component={Link} to="/chatSearch">
-                                        <ListItemIcon>
-                                            <Search />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Поиск чатов" />
-                                    </ListItem>
-                                    <ListItem button component={Link} to="/userSearch">
-                                        <ListItemIcon>
-                                            <GroupAdd />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Поиск пользователей" />
-                                    </ListItem>
-                                    <ListItem button onClick={() => this.logoutHandler()}>
-                                        <ListItemIcon>
-                                            <MeetingRoom />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Выход" />
-                                    </ListItem>
-                                </>
-                            ) : (
-                                <>
-                                    <ListItem button component={Link} to="/login">
-                                        <ListItemIcon>
-                                            <AccountCircle />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Логин" />
-                                    </ListItem>
-                                    <ListItem button component={Link} to="/registration">
-                                        <ListItemIcon>
-                                            <PersonAdd />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Регистрация" />
-                                    </ListItem>
-                                </>
-                            )}
-                        </List>
-                    </div>
-                </Drawer>
+                        <div
+                            role="presentation"
+                            onClick={() => this.drawerHandler(false)}
+                            onKeyDown={() => this.drawerHandler(false)}
+                        >
+                            <List>
+                                {user ? (
+                                    <>
+                                        <ListItem button component={Link} to="/chatSearch">
+                                            <ListItemIcon>
+                                                <Search />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Поиск чатов" />
+                                        </ListItem>
+                                        <ListItem button component={Link} to="/userSearch">
+                                            <ListItemIcon>
+                                                <GroupAdd />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Поиск пользователей" />
+                                        </ListItem>
+                                    </>
+                                ) : (
+                                    <>
+                                        <ListItem button component={Link} to="/login">
+                                            <ListItemIcon>
+                                                <AccountCircle />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Логин" />
+                                        </ListItem>
+                                        <ListItem button component={Link} to="/registration">
+                                            <ListItemIcon>
+                                                <PersonAdd />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Регистрация" />
+                                        </ListItem>
+                                    </>
+                                )}
+                            </List>
+                        </div>
+                    </Drawer>
+                </ThemeProvider>
                 <Switch>
                     <Route
                         path="/login"
@@ -142,6 +140,20 @@ class App extends React.Component {
                                 {...routeProps}
                             >
                                 <LoginView updateAuthHandler={this.updateAuthState} />
+                            </ViewHeader>
+                        )}
+                    />
+                    <Route
+                        path="/change"
+                        render={routeProps => (
+                            <ViewHeader
+                                menuHandler={() => this.drawerHandler(false)}
+                                logoutHandler={() => this.logoutHandler()}
+                                title="Смена пароля"
+                                user={user}
+                                {...routeProps}
+                            >
+                                <ChangePasswordView />
                             </ViewHeader>
                         )}
                     />
@@ -166,7 +178,7 @@ class App extends React.Component {
                             title="Чат"
                             user={user}
                         >
-                            <Index />
+                            <ChatView />
                         </ViewHeader>
                     </PrivateRoute>
                     <PrivateRoute path="/profile" user={user}>

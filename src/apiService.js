@@ -29,5 +29,8 @@ export default {
         create: ({ content, chatId }) => axiosInstance.post('/message', { content, chatId }),
         getMessages: chatId => axiosInstance.get(`/message/?chatId=${chatId}`),
         delete: id => axiosInstance.delete(`/message/${id}`)
+    },
+    change: {
+        recreate: ({ nickname, password }) => axiosInstance.post('/user', { nickname, password })
     }
 };

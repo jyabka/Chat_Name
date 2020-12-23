@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Edit, Group, MeetingRoom, Person, PersonAdd } from '@material-ui/icons';
+import { Group, MeetingRoom, Person, PersonAdd } from '@material-ui/icons';
 
 /**
  * Компонент для отображения чата в списке чатов
@@ -25,15 +25,16 @@ class Chat extends React.Component {
     render() {
         if (this.isOwner()) {
             return (
-                <ListItem button onClick={() => this.props.goHandler(this.props.chat.id)}>
+                <ListItem
+                    button
+                    variant="contained"
+                    onClick={() => this.props.goHandler(this.props.chat.id)}
+                >
                     <ListItemIcon>
                         <Group />
                     </ListItemIcon>
                     <ListItemText>{this.props.chat.title}</ListItemText>
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="edit">
-                            <Edit />
-                        </IconButton>
                         <IconButton
                             edge="end"
                             aria-label="delete"
