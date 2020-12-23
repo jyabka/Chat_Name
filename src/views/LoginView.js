@@ -4,12 +4,14 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Card, CardContent, Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
+//import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 //import { Link } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from '@/styling/theme';
-import ChangePasswordForm from '@/components/ChangePasswordForm';
+// import ChangePasswordForm from '@/components/ChangePasswordForm';
+import { Link } from 'react-router-dom';
 
 export default class LoginView extends React.Component {
     constructor(props) {
@@ -67,12 +69,12 @@ export default class LoginView extends React.Component {
             .catch(error => this.setState({ error: 'Ошибка: ' + error.response.data.error }));
     }
 
-    setNewPassword() {
-        apiService.change
-            .recreate(this.props.nickname, this.props.newPassword)
-            .then(response => response.data)
-            .then(change => this.setState({ change }));
-    }
+    // setNewPassword() {
+    //     apiService.change
+    //         .recreate(this.props.nickname, this.props.newPassword)
+    //         .then(response => response.data)
+    //         .then(change => this.setState({ change }));
+    // }
 
     redirectAfterLogin() {
         const redirectUrl = this.props.location.state
@@ -88,7 +90,7 @@ export default class LoginView extends React.Component {
 
     render() {
         const { error, result, nickname, password, formErrors } = this.state;
-        const { isDialogOpen } = this.state;
+        // const { isDialogOpen } = this.state;
 
         return (
             <ThemeProvider theme={theme}>
@@ -101,6 +103,18 @@ export default class LoginView extends React.Component {
                         justify="end"
                         style={{ minHeight: '100vh', marginTop: '12%' }}
                     >
+                        {/*<Dialog*/}
+                        {/*    onClose={() => this.setState({ isDialogOpen: false })}*/}
+                        {/*    aria-labelledby="simple-dialog-change"*/}
+                        {/*    open={isDialogOpen}*/}
+                        {/*>*/}
+                        {/*    <DialogTitle>Сменить пароль</DialogTitle>*/}
+                        {/*    <DialogContent dividers="false">*/}
+                        {/*        <ChangePasswordForm*/}
+                        {/*            handleSubmit={data => this.setNewPassword(data)}*/}
+                        {/*        />*/}
+                        {/*    </DialogContent>*/}
+                        {/*</Dialog>*/}
                         <Grid item lg={4} sm={12}>
                             <Card>
                                 <CardContent>
@@ -164,9 +178,10 @@ export default class LoginView extends React.Component {
                                                 <Typography variant="body1">
                                                     Введите логин и пароль. Ещё не зарегистрированы?{' '}
                                                     <Button
+                                                        component={Link}
+                                                        to="/registration"
                                                         variant="contained"
                                                         color="primary"
-                                                        to="/registration"
                                                     >
                                                         Зарегистрируйтесь!
                                                     </Button>
@@ -174,9 +189,8 @@ export default class LoginView extends React.Component {
                                                 <Typography variant="body1">
                                                     Забыли пароль?{' '}
                                                     <Button
-                                                        onClick={() =>
-                                                            this.setState({ isDialogOpen: true })
-                                                        }
+                                                        component={Link}
+                                                        to="/change"
                                                         variant="contained"
                                                         color="primary"
                                                     >
@@ -188,21 +202,6 @@ export default class LoginView extends React.Component {
                                     </form>
                                 </CardContent>
                             </Card>
-                            <Dialog
-                                onClose={() => this.setState({ isDialogOpen: false })}
-                                aria-labelledby="simple-dialog-title"
-                                open={isDialogOpen}
-                            >
-                                <DialogTitle>Сменить пароль</DialogTitle>
-                                <DialogContent dividers="false">
-                                    <Typography variant="body1" component="p">
-                                        Введите новый пароль
-                                    </Typography>
-                                    <ChangePasswordForm
-                                        handleSubmit={data => this.handleChatCreate(data)}
-                                    />
-                                </DialogContent>
-                            </Dialog>
                         </Grid>
                     </Grid>
                 </div>

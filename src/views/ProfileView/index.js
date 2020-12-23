@@ -16,7 +16,6 @@ import {
     DialogContent,
     DialogTitle
 } from '@material-ui/core';
-//import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { AddBox } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';

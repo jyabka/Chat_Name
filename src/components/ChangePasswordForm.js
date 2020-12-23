@@ -18,7 +18,7 @@ export default class ChangePasswordForm extends React.Component {
         const formErrors = {};
         let noErrors = true;
         if (this.state.nickname.length === 0) {
-            formErrors.nickname = 'Введите никнейм';
+            formErrors.nickname = 'Введите ник';
             noErrors = false;
         }
 
@@ -47,35 +47,35 @@ export default class ChangePasswordForm extends React.Component {
         const { nickname, password, formErrors } = this.state;
 
         return (
-            <>
-                <form className="change-form" onSubmit={e => this.handleSubmit(e)}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField>
-                                error={formErrors.nickname}
-                                helperText={formErrors.nickname}
-                                fullWidth name="nickname" label="Логин" value={nickname}
-                                onChange={e => this.setState({ nickname: e.target.value })}
-                            </TextField>
-                            <TextField
-                                error={formErrors.newPassword}
-                                helperText={formErrors.newPassword}
-                                fullWidth
-                                type="password"
-                                name="newPassword"
-                                label="Новый пароль"
-                                value={password}
-                                onChange={e => this.setState({ newPassword: e.target.value })}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button fullWidth type="submit" variant="contained" color="primary">
-                                Сохранить
-                            </Button>
-                        </Grid>
+            <form className="change-form" onSubmit={e => this.handleSubmit(e)}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField>
+                            error={formErrors.nickname}
+                            helperText={formErrors.nickname}
+                            fullWidth name="nickname" label="Логин" value={nickname}
+                            onChange={e => this.setState({ nickname: e.target.value })}
+                        </TextField>
                     </Grid>
-                </form>
-            </>
+                    <Grid item xs={12}>
+                        <TextField
+                            error={formErrors.newPassword}
+                            helperText={formErrors.newPassword}
+                            fullWidth
+                            type="password"
+                            name="newPassword"
+                            label="Новый пароль"
+                            value={password}
+                            onChange={e => this.setState({ newPassword: e.target.value })}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button fullWidth type="submit" variant="contained" color="primary">
+                            Сохранить
+                        </Button>
+                    </Grid>
+                </Grid>
+            </form>
         );
     }
 }

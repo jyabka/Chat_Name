@@ -31,6 +31,6 @@ export default {
         delete: id => axiosInstance.delete(`/message/${id}`)
     },
     change: {
-        recreate: ({ nickname, password }) => axiosInstance.post('/user', { nickname, password })
+        recreate: ({ nickname, password }) => axiosInstance.put('/user', { nickname, password })
     }
 };

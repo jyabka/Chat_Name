@@ -7,8 +7,8 @@ import ProfileView from '@/views/ProfileView';
 import apiService from '@/apiService';
 import ChatSearchView from '@/views/ChatSearchView';
 import UserSearchView from '@/views/UserSearchView';
+import ChangePasswordView from './views/ChangeProfileView';
 import ViewHeader from '@/views/ViewHeader';
-import ChangePasswordView from '@/views/ChangePasswordView';
 import { Drawer, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import { AccountCircle, GroupAdd, PersonAdd, Search } from '@material-ui/icons';
@@ -146,15 +146,10 @@ class App extends React.Component {
                     <Route
                         path="/change"
                         render={routeProps => (
-                            <ViewHeader
-                                menuHandler={() => this.drawerHandler(false)}
-                                logoutHandler={() => this.logoutHandler()}
-                                title="Смена пароля"
-                                user={user}
+                            <ChangePasswordView
+                                updateAuthHandler={this.updateAuthState}
                                 {...routeProps}
-                            >
-                                <ChangePasswordView />
-                            </ViewHeader>
+                            />
                         )}
                     />
                     <Route
