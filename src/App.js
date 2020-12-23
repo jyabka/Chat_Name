@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import { Switch, Route, Redirect /*Link*/ } from 'react-router-dom';
 import LoginView from '@/views/LoginView';
 import RegistrationView from '@/views/RegistrationView';
 import ChatView from '@/views/ProfileView';
@@ -9,9 +9,9 @@ import ChatSearchView from '@/views/ChatSearchView';
 import UserSearchView from '@/views/UserSearchView';
 import ChangePasswordView from './views/ChangeProfileView';
 import ViewHeader from '@/views/ViewHeader';
-import { Drawer, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import List from '@material-ui/core/List';
-import { AccountCircle, GroupAdd, PersonAdd, Search } from '@material-ui/icons';
+// import { Drawer, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+// import List from '@material-ui/core/List';
+// import { AccountCircle, GroupAdd, PersonAdd, Search } from '@material-ui/icons';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from '@/styling/theme';
 
@@ -72,7 +72,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { user, initDone, isDrawerOpen } = this.state;
+        const { user, initDone } = this.state;
 
         if (!initDone) {
             return <>Loading...</>;
@@ -80,60 +80,12 @@ class App extends React.Component {
 
         return (
             <>
-                <ThemeProvider theme={theme}>
-                    <Drawer
-                        color="primary"
-                        anchor="left"
-                        open={isDrawerOpen}
-                        onClose={() => this.drawerHandler(false)}
-                    >
-                        <div
-                            role="presentation"
-                            onClick={() => this.drawerHandler(false)}
-                            onKeyDown={() => this.drawerHandler(false)}
-                        >
-                            <List>
-                                {user ? (
-                                    <>
-                                        <ListItem button component={Link} to="/chatSearch">
-                                            <ListItemIcon>
-                                                <Search />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Поиск чатов" />
-                                        </ListItem>
-                                        <ListItem button component={Link} to="/userSearch">
-                                            <ListItemIcon>
-                                                <GroupAdd />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Поиск пользователей" />
-                                        </ListItem>
-                                    </>
-                                ) : (
-                                    <>
-                                        <ListItem button component={Link} to="/login">
-                                            <ListItemIcon>
-                                                <AccountCircle />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Логин" />
-                                        </ListItem>
-                                        <ListItem button component={Link} to="/registration">
-                                            <ListItemIcon>
-                                                <PersonAdd />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Регистрация" />
-                                        </ListItem>
-                                    </>
-                                )}
-                            </List>
-                        </div>
-                    </Drawer>
-                </ThemeProvider>
+                <ThemeProvider theme={theme}></ThemeProvider>
                 <Switch>
                     <Route
                         path="/login"
                         render={routeProps => (
                             <ViewHeader
-                                menuHandler={() => this.drawerHandler(true)}
                                 logoutHandler={() => this.logoutHandler()}
                                 title="Логин"
                                 user={user}
@@ -156,7 +108,6 @@ class App extends React.Component {
                         path="/registration"
                         render={routeProps => (
                             <ViewHeader
-                                menuHandler={() => this.drawerHandler(true)}
                                 logoutHandler={() => this.logoutHandler()}
                                 title="Регистрация"
                                 user={user}
@@ -168,7 +119,6 @@ class App extends React.Component {
                     />
                     <PrivateRoute path="/chat/:id" user={user}>
                         <ViewHeader
-                            menuHandler={() => this.drawerHandler(true)}
                             logoutHandler={() => this.logoutHandler()}
                             title="Чат"
                             user={user}
@@ -178,7 +128,6 @@ class App extends React.Component {
                     </PrivateRoute>
                     <PrivateRoute path="/profile" user={user}>
                         <ViewHeader
-                            menuHandler={() => this.drawerHandler(true)}
                             logoutHandler={() => this.logoutHandler()}
                             title="Профиль"
                             user={user}
@@ -188,7 +137,6 @@ class App extends React.Component {
                     </PrivateRoute>
                     <PrivateRoute path="/chatSearch" user={user}>
                         <ViewHeader
-                            menuHandler={() => this.drawerHandler(true)}
                             logoutHandler={() => this.logoutHandler()}
                             title="Поиск чатов"
                             user={user}
@@ -198,7 +146,6 @@ class App extends React.Component {
                     </PrivateRoute>
                     <PrivateRoute path="/userSearch" user={user}>
                         <ViewHeader
-                            menuHandler={() => this.drawerHandler(true)}
                             logoutHandler={() => this.logoutHandler()}
                             title="Поиск пользователей"
                             user={user}

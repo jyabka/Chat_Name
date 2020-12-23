@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './styles.module.css';
 import { AppBar, Menu, MenuItem, Toolbar } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+//import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { AccountCircle } from '@material-ui/icons';
@@ -34,7 +34,7 @@ export default class ViewHeader extends React.Component {
     }
 
     render() {
-        const { user, logoutHandler, menuHandler, title, children, history } = this.props;
+        const { user, logoutHandler, title, children, history } = this.props;
         const { menuOpen, anchorEl } = this.state;
         return (
             <ThemeProvider theme={theme}>
@@ -42,15 +42,6 @@ export default class ViewHeader extends React.Component {
                     <div className={styles.root}>
                         <AppBar color="primary" position="fixed">
                             <Toolbar>
-                                <IconButton
-                                    edge="start"
-                                    className={styles.menuButton}
-                                    color="inherit"
-                                    aria-label="menu"
-                                    onClick={menuHandler}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
                                 <Typography variant="h6" className={styles.title}>
                                     {title}
                                 </Typography>
@@ -70,12 +61,12 @@ export default class ViewHeader extends React.Component {
                                             anchorEl={anchorEl}
                                             anchorOrigin={{
                                                 vertical: 'top',
-                                                horizontal: 'right'
+                                                horizontal: 'left'
                                             }}
                                             keepMounted
                                             transformOrigin={{
                                                 vertical: 'top',
-                                                horizontal: 'right'
+                                                horizontal: 'left'
                                             }}
                                             open={menuOpen}
                                             onClose={e => this.handleMenu(e, false)}

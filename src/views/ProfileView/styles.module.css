@@ -29,6 +29,7 @@
   height: 100%;
   width: 800px;
   margin: 0 auto;
+  z-index: 12;
 }
 
 .messages {

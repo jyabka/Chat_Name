@@ -8,19 +8,23 @@ import ChatList from '@/components/ChatList';
 import Typography from '@material-ui/core/Typography';
 import {
     Box,
-    //Button,
+    Button,
     Card,
     //CardActions,
     CardContent,
     Dialog,
     DialogContent,
-    DialogTitle
+    DialogTitle,
+    ListItem,
+    ListItemIcon
+    //MenuItem
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import { AddBox } from '@material-ui/icons';
+import { AddBox, GroupAdd, Search } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from '@/styling/theme';
+import { Link } from 'react-router-dom';
 
 export default class ProfileView extends React.Component {
     constructor(props) {
@@ -64,7 +68,7 @@ export default class ProfileView extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { user, logoutHandler } = this.props;
         const { isDialogOpen } = this.state;
 
         return (
@@ -85,6 +89,19 @@ export default class ProfileView extends React.Component {
                                     <Typography variant="body2" component="p">
                                         С нами с {new Date(user.createdAt).toLocaleString()}
                                     </Typography>
+                                    <Button onClick={logoutHandler}>Выйти</Button>
+                                    <>
+                                        <ListItem button component={Link} to="/chatSearch">
+                                            <ListItemIcon>
+                                                <Search />
+                                            </ListItemIcon>
+                                        </ListItem>
+                                        <ListItem button component={Link} to="/userSearch">
+                                            <ListItemIcon>
+                                                <GroupAdd />
+                                            </ListItemIcon>
+                                        </ListItem>
+                                    </>
                                 </CardContent>
                                 <div className={styles.add}>
                                     <IconButton
@@ -109,7 +126,7 @@ export default class ProfileView extends React.Component {
                                     goHandler={id => this.goHandler(id)}
                                     joinHandler={id => this.joinHandler(id)}
                                     deleteHandler={id => this.deleteHandler(id)}
-                                    //onClick={(styles.chatView.opacity = 1)}
+                                    onClick={ChatView.render}
                                 />
                             </Grid>
                         </Box>
